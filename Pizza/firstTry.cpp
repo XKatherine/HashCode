@@ -16,7 +16,7 @@ struct Shape{
 	}
 };
 
-void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row, int col, int grd, int cll, int rows, int cols){
+int findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row, int col, int grd, int cll, int rows, int cols){
 	priority_queue<Shape> shape;
 	if(grd==0) shape.push(Shape(1,1));
 	else if(grd>0)
@@ -25,6 +25,7 @@ void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row,
 				shape.push(Shape(r,c));
 	//Try every shape: from smaller to bigger ones
 	while(!shape.empty()){
+		int a = shape.top().area;
 		int r = shape.top().height;
 		int c = shape.top().length;
 		shape.pop();
@@ -43,17 +44,18 @@ void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row,
 				for(int q=0; q<c; q++)
 					pattern[p+row][q+col]='x';
 			ans.push_back(vector<int>{row,row+r-1,col,col+c-1});
-			return;
+			return a;
 		}
 	}
+	return 0;
 }
 
-vector<vector<int>> algo(vector<vector<char>>& pattern, int grd, int cll, int rows, int cols){
+vector<vector<int>> algo(vector<vector<char>>& pattern, int grd, int cll, int rows, int cols, int* ret){
 	vector<vector<int>> ans;
 	for(int i = 0; i<rows; i++)
 		for(int j = 0; j<cols; j++)
 			if(pattern[i][j] != 'x')
-				findShape(pattern,ans,i,j,grd,cll,rows,cols);
+				*ret += findShape(pattern,ans,i,j,grd,cll,rows,cols);
 	return ans;
 }
 
@@ -77,17 +79,21 @@ vector<vector<char>> readFile(char* fileName, int* row, int* col, int* grd, int*
 
 int main(int argc, char** argv){
 	int row, col, grd, cll;
+	int score;
 	vector<vector<char>> matrix = readFile(argv[1], &row, &col, &grd, &cll);
 	for(int i=0; i<row; i++){
 		for(int j=0; j<col; j++)
 			cout<<matrix[i][j];
 		cout<<endl;
 	}
-	vector<vector<int>> ans = algo(matrix, grd, cll, row, col);
+	vector<vector<int>> ans = algo(matrix, grd, cll, row, col, &score);
+	cout<<score<<endl;
+	/*
 	cout<<ans.size()<<endl;
 	for(auto i : ans){
 		for(auto j : i)
 			cout<<j<<" ";
 		cout<<endl;
 	}
+	*/
 }
