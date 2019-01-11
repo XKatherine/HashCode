@@ -78,6 +78,11 @@ vector<vector<char>> readFile(char* fileName, int* row, int* col, int* grd, int*
 int main(int argc, char** argv){
 	int row, col, grd, cll;
 	vector<vector<char>> matrix = readFile(argv[1], &row, &col, &grd, &cll);
+	for(int i=0; i<row; i++){
+		for(int j=0; j<col; j++)
+			cout<<matrix[i][j];
+		cout<<endl;
+	}
 	vector<vector<int>> ans = algo(matrix, grd, cll, row, col);
 
   	ofstream outfile;
@@ -86,7 +91,7 @@ int main(int argc, char** argv){
 	for(auto i : ans){
 		for(auto j : i)
 			outfile<<j<<" ";
-		outfile<<endl;
+		cout<<endl;
 	}
   	outfile.close();
 
