@@ -3,40 +3,57 @@
 #include<vector>
 #include<fstream>
 #include<string>
+#include<queue>
 using namespace std;
 
-void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row, int col, int grd, int rows, int cols){
-	vector<pair<int, int>> shape{make_pair(1,2),make_pair(2,1),make_pair(1,3),make_pair(3,1),make_pair(2,2),make_pair(1,5),make_pair(5,1)};
+struct Shape{
+	int height, length, area;
+	Shape(int h, int l):height(h),length(l),area(h*l){}
+
+	friend bool operator<(Shape s1, Shape s2){
+    	if(s1.area==s2.area) return s1.area>s2.area;
+    	return s1.area>s2.area;
+	}
+};
+
+void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row, int col, int grd, int cll, int rows, int cols){
+	priority_queue<Shape> shape;
+	if(grd==0) shape.push(Shape(1,1));
+	else if(grd>0)
+		for(int r=1; r<=cll; r++)
+			for(int c=grd; r*c<=cll; c++)
+				shape.push(Shape(r,c));
 	//Try every shape: from smaller to bigger ones
-	for(auto i : shape){
+	while(!shape.empty()){
+		int r = shape.top().height;
+		int c = shape.top().length;
+		shape.pop();
 		bool isValid = true;
 		int t = 0, m = 0;
-		if(i.first+row>rows || i.second+col>cols) continue;
-		for(int p=0; p<i.first; p++)
-			for(int q=0; q<i.second; q++)
+		if(r+row>rows || c+col>cols) continue;
+		for(int p=0; p<r; p++)
+			for(int q=0; q<c; q++)
 				switch(pattern[p+row][q+col]){
 					case 'T': ++t; break;
 					case 'M': ++m; break;
 					case 'x': isValid = false; break;
 				}
 		if(isValid && t>=grd && m>=grd){
-			for(int p=0; p<i.first; p++){
-				for(int q=0; q<i.second; q++){
+			for(int p=0; p<r; p++)
+				for(int q=0; q<c; q++)
 					pattern[p+row][q+col]='x';
-				}
-			}
-			ans.push_back(vector<int>{row,row+i.first-1,col,col+i.second-1});
+			ans.push_back(vector<int>{row,row+r-1,col,col+c-1});
 			return;
 		}
 	}
 }
 
-vector<vector<int>> algo(vector<vector<char>>& pattern, int grd, int rows, int cols){
+vector<vector<int>> algo(vector<vector<char>>& pattern, int grd, int cll, int rows, int cols){
 	vector<vector<int>> ans;
 	for(int i = 0; i<rows; i++)
 		for(int j = 0; j<cols; j++)
 			if(pattern[i][j] != 'x')
-				findShape(pattern,ans,i,j,grd,rows,cols);
+				findShape(pattern,ans,i,j,grd,cll,rows,cols);
 	return ans;
 }
 
@@ -66,7 +83,7 @@ int main(int argc, char** argv){
 			cout<<matrix[i][j];
 		cout<<endl;
 	}
-	vector<vector<int>> ans = algo(matrix, grd, row, col);
+	vector<vector<int>> ans = algo(matrix, grd, cll, row, col);
 	cout<<ans.size()<<endl;
 	for(auto i : ans){
 		for(auto j : i)
