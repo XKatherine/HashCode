@@ -7,40 +7,19 @@ using namespace std;
 
 void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row, int col, int grd, int rows, int cols){
 	vector<pair<int, int>> shape{make_pair(1,2),make_pair(2,1),make_pair(1,3),make_pair(3,1),make_pair(2,2),make_pair(1,5),make_pair(5,1)};
+	//Try every shape: from smaller to bigger ones
 	for(auto i : shape){
 		bool isValid = true;
-		int t = 0;
-		int m = 0;
-		for(int p=0; p<i.first; p++){
-			if(p+row>=rows){
-				isValid = false;
-				break;
-			}
-			for(int q=0; q<i.second; q++){
-				if(p+row>=rows){
-					isValid = false;
-					break;
-				}
+		int t = 0, m = 0;
+		if(i.first+row>rows || i.second+col>cols) continue;
+		for(int p=0; p<i.first; p++)
+			for(int q=0; q<i.second; q++)
 				switch(pattern[p+row][q+col]){
-					case 'x':
-						isValid = false;
-						break;
-					case 'T':
-						++t;
-						break;
-					case 'M':
-						++m;
-						break;
+					case 'T': ++t; break;
+					case 'M': ++m; break;
+					case 'x': isValid = false; break;
 				}
-				if(!isValid)
-					break;
-			}
-			if(!isValid)
-				break;
-		}
-		if(!isValid)
-			continue;
-		if(t>=grd && m>=grd){
+		if(isValid && t>=grd && m>=grd){
 			for(int p=0; p<i.first; p++){
 				for(int q=0; q<i.second; q++){
 					pattern[p+row][q+col]='x';
@@ -50,18 +29,14 @@ void findShape(vector<vector<char>>& pattern, vector<vector<int>>& ans, int row,
 			return;
 		}
 	}
-	return;
 }
 
 vector<vector<int>> algo(vector<vector<char>>& pattern, int grd, int rows, int cols){
 	vector<vector<int>> ans;
-	for(int i = 0; i<rows; i++){
-		for(int j = 0; j<cols; j++){
-			if(pattern[i][j] != 'x'){
+	for(int i = 0; i<rows; i++)
+		for(int j = 0; j<cols; j++)
+			if(pattern[i][j] != 'x')
 				findShape(pattern,ans,i,j,grd,rows,cols);
-			}
-		}
-	}
 	return ans;
 }
 
