@@ -42,12 +42,11 @@ void findShape(vector<vector<char>>& pattern, map<int,vector<pair<int, int>>>& a
 			v.push_back(make_pair(r,c));
 		}
 	}
-	if(v.size()>0)
-		ans.insert(make_pair(row*cols+col,v));
+	ans.insert(make_pair(row*cols+col,v));
 }
 
 int select(int idx, map<int,vector<pair<int,int>>> shapes, int rows, int cols, vector<int> selected){
-	if(idx == rows*cols) return 0;
+	if(idx >= rows*cols) return 0;
 	vector<pair<int,int>> pool = shapes[idx];//choices to choose
 	int max = select(idx+1, shapes, rows, cols, selected), max_idx = -1;
 	if(find(selected.begin(), selected.end(), idx) != selected.end() && pool.size()==0) return max;
@@ -62,17 +61,19 @@ int select(int idx, map<int,vector<pair<int,int>>> shapes, int rows, int cols, v
 		for(int r=0; r<pool[i].first; r++)
 			for(int c=0; c<pool[i].second; c++)
 				tempSelected.push_back(r*cols+c+idx);
-		int score = pool[i].first*pool[i].second+select(idx+1, shapes, rows, cols, tempSelected);
+		int score = pool[i].first*pool[i].second+select(idx+pool[i].second, shapes, rows, cols, tempSelected);
 		if(score>max){
 			max = score;
 			max_idx = i;
 		}
 	}
+	/*
 	if(max_idx > -1){
 		for(int r=0; r<pool[max_idx].first; r++)
 			for(int c=0; c<pool[max_idx].second; c++)
 				selected.push_back(r*cols+c+idx);
 	}
+	*/
 	return max;
 }
 
@@ -81,6 +82,16 @@ int algo(vector<vector<char>>& pattern, int grd, int cll, int rows, int cols){
 	for(int i = 0; i<rows; i++)
 		for(int j = 0; j<cols; j++)
 			findShape(pattern,ans,i,j,grd,cll,rows,cols);
+	for(auto i : ans){
+		cout<<"idx: "<<i.first<<" :";
+		if(i.second.size()==0){
+			cout<<endl;
+			continue;
+		}
+		for(auto j : i.second)
+			cout<<"{ "<<j.first<<", "<<j.second<<" }";
+		cout<<endl;
+	}
 	vector<int> selected;
 	int idx = 0;//index of ans
 	return select(idx,ans,rows,cols,selected);
