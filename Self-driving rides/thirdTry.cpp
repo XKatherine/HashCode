@@ -7,6 +7,8 @@
 #include<queue>
 using namespace std;
 
+
+
 struct Ride{
 	pair<int, int> start;//start point
 	pair<int, int> end;//end point
@@ -19,7 +21,7 @@ struct Ride{
 	friend bool operator< (Ride l, Ride r){
 		if(l.et == r.et) return l.et < r.et;
 		return l.et < r.et;
-	}
+n	}
 };
 
 struct Car{

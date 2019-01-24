@@ -3,6 +3,7 @@
 #include<vector>
 #include<fstream>
 #include<string>
+#include<cmath>
 #include<queue>
 using namespace std;
 
@@ -91,12 +92,4 @@ int main(int argc, char** argv){
   	outfile.close();
 
   	return 0;
-	/*
-	cout<<ans.size()<<endl;
-	for(auto i : ans){
-		for(auto j : i)
-			cout<<j<<" ";
-		cout<<endl;
-	}
-	*/
 }
