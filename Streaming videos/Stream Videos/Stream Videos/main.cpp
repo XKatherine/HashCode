@@ -4,7 +4,17 @@
 #include<string>
 #include<sstream>
 #include<queue>
+#include<unordered_map>
 using namespace std;
+
+typedef pair<int, int> pi;
+
+class Cmp{
+public:
+    bool operator() (pi l, pi r) const {
+        return l.second > r.second;
+    }
+};
 
 struct Video {
     int id, size;
@@ -13,22 +23,23 @@ struct Video {
 
 struct Cache {
     int id, cap;
+    unordered_map<int, int> videos;
     Cache(int i, int c) : id(i), cap(c) {}
 };
 
 struct Endpoint {
     int L, K, id;
-    priority_queue<int, int> cachesConnected;
-    Endpoint(int i, int L, int K, priority_queue<int, int>& c) : id(i), L(L), K(K), cachesConnected(c) {}
+    priority_queue<pi, vector<pi>, Cmp> cachesConnected;
+    Endpoint(int i, int L, int K, priority_queue<pi, vector<pi>, Cmp>& c) : id(i), L(L), K(K), cachesConnected(c) {}
 };
 
 struct Request {
     int num;
-    Video video;
-    Endpoint endpoint;
-    Request(Video v, Endpoint e, int n) : video(v), endpoint(e), num(n) {}
+    int video;
+    int endpoint;
+    Request(int v, int e, int n) : video(v), endpoint(e), num(n) {}
     
-    friend bool operator< (Request & l, Request & r){
+    friend bool operator< (Request l, Request r){
         return l.num < r.num;
     }
 };
@@ -37,6 +48,8 @@ class Solution {
 public:
     int V, E, R, C, X;
     int score = 0;
+    int totalRequest = 0;
+    int used = 0;
     vector<Video> videos;
     vector<Cache> caches;
     vector<Endpoint> endpoints;
@@ -69,7 +82,7 @@ public:
             //Endpoints
             for(int i = 0; i < E; ++i) {
                 int L, K;
-                priority_queue<int, int> m;
+                priority_queue<pi, vector<pi>, Cmp> m;
                 getline(file, line);
                 istringstream is(line);
                 is >> L >> K;
@@ -92,7 +105,8 @@ public:
                 istringstream is(line);
                 is >> v >> c >> s;
                 
-                requests.push(Request(videos[v], endpoints[c], s));
+                requests.push(Request(v, c, s));
+                totalRequest += s;
             }
 
             file.close();
@@ -100,10 +114,47 @@ public:
     }
     
     void solve() {
-        while(!requests.empty()){
-            cout<<requests.top().num<<endl;
+        while(!requests.empty()) {
+            Endpoint cur = endpoints[requests.top().endpoint];
+            Video video = videos[requests.top().video];
+            int num = requests.top().num;
             requests.pop();
+            
+            while(!cur.cachesConnected.empty()) {
+                int cache = cur.cachesConnected.top().first;
+                if (caches[cache].videos.find(video.id) != caches[cache].videos.end()) {
+                    score +=  num * (cur.L - cur.cachesConnected.top().second);
+                    break;
+                }else if(caches[cache].cap >= video.size) {
+                    caches[cache].cap -= video.size;
+                    score +=  num * (cur.L - cur.cachesConnected.top().second);
+                    if(caches[cache].videos.size() == 0) used++;
+                    caches[cache].videos[video.id] = 1;
+                    break;
+                }
+                
+                cur.cachesConnected.pop();
+            }
         }
+        cout << score / totalRequest * 1000 <<endl;
+        
+        output();
+    }
+    
+    void output(){
+        ofstream outfile;
+        outfile.open("out.txt");
+        outfile << used << endl;
+        for(auto i : caches){
+            if(i.videos.size() > 0){
+                outfile << i.id;
+                for(auto it = i.videos.begin(); it != i.videos.end(); ++it){
+                    outfile << " " << it->first;
+                }
+                outfile << endl;
+            }
+        }
+        outfile.close();
     }
 
 };

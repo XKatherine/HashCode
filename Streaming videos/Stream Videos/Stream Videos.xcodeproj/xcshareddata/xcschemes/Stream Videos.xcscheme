@@ -67,6 +67,14 @@
             argument = "me_at_the_zoo.in"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "trending_today.in"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "example.in"
+            isEnabled = "NO">
+         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EA99DC642226792500604D75 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA99DC632226792500604D75 /* main.cpp */; };
+		EA99DC712227A9AE00604D75 /* second.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA99DC6F2227A9AE00604D75 /* second.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,11 +24,12 @@
 
 /* Begin PBXFileReference section */
 		EA99DC602226792500604D75 /* Stream Videos */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Stream Videos"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA99DC632226792500604D75 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EA99DC6A22267C7100604D75 /* me_at_the_zoo.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = me_at_the_zoo.in; sourceTree = "<group>"; };
 		EA99DC6B22267C7200604D75 /* kittens.in.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = kittens.in.txt; sourceTree = "<group>"; };
 		EA99DC6C22267C7200604D75 /* videos_worth_spreading.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = videos_worth_spreading.in; sourceTree = "<group>"; };
 		EA99DC6D22267C7200604D75 /* trending_today.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = trending_today.in; sourceTree = "<group>"; };
+		EA99DC6E22277C6800604D75 /* example.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = example.in; sourceTree = "<group>"; };
+		EA99DC6F2227A9AE00604D75 /* second.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = second.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +66,8 @@
 				EA99DC6A22267C7100604D75 /* me_at_the_zoo.in */,
 				EA99DC6D22267C7200604D75 /* trending_today.in */,
 				EA99DC6C22267C7200604D75 /* videos_worth_spreading.in */,
-				EA99DC632226792500604D75 /* main.cpp */,
+				EA99DC6E22277C6800604D75 /* example.in */,
+				EA99DC6F2227A9AE00604D75 /* second.cpp */,
 			);
 			path = "Stream Videos";
 			sourceTree = "<group>";
@@ -126,7 +128,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA99DC642226792500604D75 /* main.cpp in Sources */,
+				EA99DC712227A9AE00604D75 /* second.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
